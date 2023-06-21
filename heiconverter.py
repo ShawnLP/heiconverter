@@ -2,9 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 from PIL import Image
-from pillow_heif import register_heif_opener
 
-register_heif_opener()
 
 def convert_heic_to_image_format(heic_file_path, output_dir, image_format):
     # Open the HEIC image using Pillow
@@ -22,19 +20,25 @@ def convert_heic_to_image_format(heic_file_path, output_dir, image_format):
 
 
 def browse_file():
+    # Open a file dialog to select a HEIC file
     file_path = filedialog.askopenfilename(filetypes=[("HEIC files", "*.heic")])
     if file_path:
+        # Update the file path entry field with the selected file path
         entry_file_path.delete(0, tk.END)
         entry_file_path.insert(0, file_path)
 
 
 def browse_output_dir():
+    # Open a file dialog to select an output directory
     output_dir = filedialog.askdirectory()
     if output_dir:
+        # Update the output directory entry field with the selected directory
         entry_output_dir.delete(0, tk.END)
         entry_output_dir.insert(0, output_dir)
 
+
 def convert():
+    # Retrieve the selected HEIC file path, output directory, and image format
     heic_file_path = entry_file_path.get()
     output_dir = entry_output_dir.get()
     image_format = format_selection.get()
@@ -44,12 +48,13 @@ def convert():
             image_format = image_format.lower()
             if image_format in ["png", "jpg", "gif"]:
                 if image_format == "jpg":
+                    # Convert "jpg" to "jpeg" for correct format identifier
                     image_format = "jpeg"
                 converted_file_path = convert_heic_to_image_format(
                     heic_file_path, output_dir, image_format
                 )
                 lbl_status.config(
-                    text="HEIC file converted to {}:/n{}".format(image_format.upper(), converted_file_path)
+                    text="HEIC file converted to {}:\n{}".format(image_format.upper(), converted_file_path)
                 )
             else:
                 lbl_status.config(text="Invalid image format. Please select PNG, JPG, or GIF.")
